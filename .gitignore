@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
+.pytest_cache/
 *.py[cod]
 *$py.class
 
@@ -112,3 +113,4 @@ notebooks/
 reports/
 demo.azcli
 setup.sh
+wandb/
