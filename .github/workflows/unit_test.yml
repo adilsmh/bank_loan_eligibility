@@ -27,7 +27,7 @@ jobs:
           pip install -r ./requirements.txt
       - name: Login to wandb API
         run: |
-          wandb login --relogin
+          wandb login [secrets.WANDB_API_TOKEN]
       - name: Run predefined unit tests
         run: |
           pytest ./scripts/trainer.py
