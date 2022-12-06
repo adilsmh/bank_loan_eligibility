@@ -6,7 +6,7 @@ import numpy as np
 import wandb
 from wandb import AlertLevel
 
-wandb.login(key=[os.getenv("WANDB_API_TOKEN")])
+wandb.login(key=["cf946a0ea9f104db10794da536d8d192de788614"])
 wandb.init(project="bank_loan_eligibility")
 
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
