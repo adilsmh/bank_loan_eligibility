@@ -108,7 +108,6 @@ venv.bak/
 
 # unecessary folders
 data/test.txt
-models/
 notebooks/
 reports/
 demo.azcli
