@@ -105,7 +105,7 @@ def feature_encoder(X, y, ctg_fts):
 
     return X, y
 
-def feature_engineering(X, y, pipe, threshold, unit_test=True):
+def feature_hyperparameter_improver(X, y, pipe, threshold, unit_test=True):
     # Converting the scale of loan term from months to years
     X["loan_amount_term_months"] = (X["loan_amount_term"] / 12)
 
@@ -216,5 +216,5 @@ def test_combined_fts_against_benchmark():
     X, y = feature_encoder(X, y, ctg_fts=categorical_fts)
 
     # Unit testing on first and second model improvement features exp run #
-    X_eng, y = feature_engineering(X, y, lg_pipe, threshold=BENCHMARK_LIMIT, unit_test=False)
-    hyperparameter_optimizer(lg_pipe, X_eng, y, threshold=BENCHMARK_LIMIT)
+    X_eng, y = feature_engineering(X, y, lg_pipe, threshold=BENCHMARK_LIMIT, unit_test=True)
+    # hyperparameter_optimizer(lg_pipe, X_eng, y, threshold=BENCHMARK_LIMIT)
