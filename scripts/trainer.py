@@ -129,54 +129,54 @@ def feature_hyperparameter_improver(X, y, pipe, threshold, unit_test=True):
     if not unit_test:
         return X, y
 
-    if precision < threshold: wandb.alert(title="Low precision",
-                                          text=f"Precision {precision} is below the acceptable threshold {threshold}",
-                                          level=AlertLevel.WARN)
+    # if precision < threshold: wandb.alert(title="Low precision",
+    #                                       text=f"Precision {precision} is below the acceptable threshold {threshold}",
+    #                                       level=AlertLevel.WARN)
 
     assert precision >= threshold, f"Low precision, precision of {precision} is below acceptable threshold {threshold}"
 
-    wandb.summary["precision"] = precision
-    wandb.summary["recall"] = recall
-    wandb.sklearn.plot_feature_importances(pipe["classifier"], fts_names)
+    # wandb.summary["precision"] = precision
+    # wandb.summary["recall"] = recall
+    # wandb.sklearn.plot_feature_importances(pipe["classifier"], fts_names)
 
-    labels = ["One", "Zero"]
-    wandb.sklearn.plot_confusion_matrix(y_test, y_pred, labels)
-    wandb.sklearn.plot_roc(y_test, y_probas, labels)
+    # labels = ["One", "Zero"]
+    # wandb.sklearn.plot_confusion_matrix(y_test, y_pred, labels)
+    # wandb.sklearn.plot_roc(y_test, y_probas, labels)
 
-def hyperparameter_optimizer(pipe, X_eng, y, threshold):
-    params = {'C': 10,
-        'class_weight': 'balanced',
-        'dual': False,
-        'multi_class': 'auto',
-        'penalty': 'l2',
-        'solver': 'lbfgs'
-    }
+# def hyperparameter_optimizer(pipe, X_eng, y, threshold):
+#     params = {'C': 10,
+#         'class_weight': 'balanced',
+#         'dual': False,
+#         'multi_class': 'auto',
+#         'penalty': 'l2',
+#         'solver': 'lbfgs'
+#     }
 
-    X_train, X_test, y_train, y_test = splitter_balancer(X_eng, y)
+#     X_train, X_test, y_train, y_test = splitter_balancer(X_eng, y)
 
-    pipe[-1].set_params(**params)
-    pipe.fit(X_train, y_train)
+#     pipe[-1].set_params(**params)
+#     pipe.fit(X_train, y_train)
 
-    y_pred = pipe.predict(X_test)
-    y_probas = pipe.predict_proba(X_test)
-    labels = ["One", "Zero"]
-    fts_names = X_train.columns
+#     y_pred = pipe.predict(X_test)
+#     y_probas = pipe.predict_proba(X_test)
+#     labels = ["One", "Zero"]
+#     fts_names = X_train.columns
 
-    precision = precision_score(y_test, y_pred)
-    # precision = 0.45
-    recall = recall_score(y_test, y_pred)
+#     precision = precision_score(y_test, y_pred)
+#     # precision = 0.45
+#     recall = recall_score(y_test, y_pred)
 
-    if precision < threshold: wandb.alert(title="Low precision",
-                                          text=f"Precision {precision} is below the acceptable threshold {threshold}",
-                                          level=AlertLevel.WARN)
+#     if precision < threshold: wandb.alert(title="Low precision",
+#                                           text=f"Precision {precision} is below the acceptable threshold {threshold}",
+#                                           level=AlertLevel.WARN)
 
-    assert precision >= threshold, f"Low precision, precision of {precision} is below acceptable threshold {threshold}"
+#     assert precision >= threshold, f"Low precision, precision of {precision} is below acceptable threshold {threshold}"
 
-    wandb.summary["precision"] = precision
-    wandb.summary["recall"] = recall
-    wandb.sklearn.plot_feature_importances(pipe["classifier"], fts_names)
-    wandb.sklearn.plot_confusion_matrix(y_test, y_pred, labels)
-    wandb.sklearn.plot_roc(y_test, y_probas, labels)
+#     wandb.summary["precision"] = precision
+#     wandb.summary["recall"] = recall
+#     wandb.sklearn.plot_feature_importances(pipe["classifier"], fts_names)
+#     wandb.sklearn.plot_confusion_matrix(y_test, y_pred, labels)
+#     wandb.sklearn.plot_roc(y_test, y_probas, labels)
 
 def pipeline_constructor(num_fts_l):
     column_transformer = ColumnTransformer([
@@ -185,7 +185,7 @@ def pipeline_constructor(num_fts_l):
 
     return Pipeline([("datafeed", column_transformer), ("classifier", _model)])
 
-def test_feature_eng_against_benchmark():
+def test_against_benchmark():
     BENCHMARK_LIMIT = 0.75
     lg_pipe = pipeline_constructor(numerical_fts_eng)
 
@@ -194,7 +194,7 @@ def test_feature_eng_against_benchmark():
     X, y = feature_encoder(X, y, ctg_fts=categorical_fts)
 
     # Unit testing on first feature engineering model improvement exp run #
-    feature_engineering(X, y, lg_pipe, threshold=BENCHMARK_LIMIT)
+    feature_hyperparameter_improver(X, y, lg_pipe, threshold=BENCHMARK_LIMIT)
 
 # def test_hps_optimization_against_benchmark(ft_eng=False):
 #     BENCHMARK_LIMIT = 0.75
@@ -207,14 +207,14 @@ def test_feature_eng_against_benchmark():
 #     # Unit testing on second model improvement hyperparamter optimization feature exp run #
 #     hyperparameter_optimizer(lg_pipe, X, y, threshold=BENCHMARK_LIMIT)
 
-def test_combined_fts_against_benchmark():
-    BENCHMARK_LIMIT = 0.75
-    lg_pipe = pipeline_constructor(numerical_fts_eng)
+# def test_combined_fts_against_benchmark():
+#     BENCHMARK_LIMIT = 0.75
+#     lg_pipe = pipeline_constructor(numerical_fts_eng)
 
-    # Preprocess raw data
-    X, y = preprocessor()
-    X, y = feature_encoder(X, y, ctg_fts=categorical_fts)
+#     # Preprocess raw data
+#     X, y = preprocessor()
+#     X, y = feature_encoder(X, y, ctg_fts=categorical_fts)
 
-    # Unit testing on first and second model improvement features exp run #
-    X_eng, y = feature_engineering(X, y, lg_pipe, threshold=BENCHMARK_LIMIT, unit_test=True)
-    # hyperparameter_optimizer(lg_pipe, X_eng, y, threshold=BENCHMARK_LIMIT)
+#     # Unit testing on first and second model improvement features exp run #
+#     X_eng, y = feature_engineering(X, y, lg_pipe, threshold=BENCHMARK_LIMIT, unit_test=True)
+#     # hyperparameter_optimizer(lg_pipe, X_eng, y, threshold=BENCHMARK_LIMIT)
