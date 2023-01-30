@@ -63,8 +63,8 @@ class MultiColumnLabelEncoder:
 
 # //////////////////////////////////////////////////// #
 
-model_path = os.path.join("./models/clf_model.joblib")
-train_set_path = os.path.join("./data/train.txt")
+model_path = os.path.join("../models/clf_model.joblib")
+train_set_path = os.path.join("../data/train.txt")
 
 _model = joblib.load(model_path)
 _train_set = pd.read_csv(train_set_path, low_memory=False)

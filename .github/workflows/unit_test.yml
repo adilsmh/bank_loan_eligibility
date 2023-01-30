@@ -30,4 +30,4 @@ jobs:
       #     pip install -r ./requirements.txt
       - name: Run predefined unit tests
         run: |
-          pytest --no-header -v ./scripts/trainer.py
+          pytest --no-header -v --disable-warnings ./scripts/trainer.py
